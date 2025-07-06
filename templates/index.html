@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Health Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-utensils"></i> Food Health Predictor</h1>
+            <p>Enter a barcode to predict whether the food is Very Healthy, Moderately Healthy, or Unhealthy.</p>
+        </header>
+
+        <div class="search-container">
+            <form action="/predict" method="post">
+                <div class="input-group">
+                    <input type="text" name="barcode" id="barcode" placeholder="Enter Barcode (e.g., 737628064502)" required>
+                    <button type="submit"><i class="fas fa-search"></i> Predict</button>
+                </div>
+            </form>
+        </div>
+
+        {% if error %}
+        <div class="error-message">
+            <i class="fas fa-exclamation-circle"></i> {{ error }}
+        </div>
+        {% endif %}
+
+        {% if prediction %}
+        <div class="results-container">
+            <div class="product-header">
+                <div class="product-info">
+                    <h2>{{ product_name }}</h2>
+                    <p class="brand">{{ brand_name }}</p>
+                    
+                    <div class="prediction-badge 
+                        {% if prediction == 'Very Healthy' %}very-healthy
+                        {% elif prediction == 'Moderately Healthy' %}moderately-healthy
+                        {% else %}unhealthy{% endif %}">
+                        {{ prediction }}
+                    </div>
+                </div>
+                
+                {% if image_url != 'Not available' %}
+                <div class="product-image">
+                    <img src="{{ image_url }}" alt="{{ product_name }}">
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="details-container">
+                <div class="detail-section">
+                    <h3><i class="fas fa-chart-pie"></i> Nutritional Information (per 100g)</h3>
+                    <div class="nutrition-grid">
+                        <div class="nutrition-item">
+                            <span class="nutrition-label">Energy</span>
+                            <span class="nutrition-value">{{ nutriments.get('energy_100g', 'N/A') }} kJ</span>
+                        </div>
+                        <div class="nutrition-item">
+                            <span class="nutrition-label">Fat</span>
+                            <span class="nutrition-value">{{ nutriments.get('fat_100g', 'N/A') }} g</span>
+                        </div>
+                        <div class="nutrition-item">
+                            <span class="nutrition-label">Saturated Fat</span>
+                            <span class="nutrition-value">{{ nutriments.get('saturated-fat_100g', 'N/A') }} g</span>
+                        </div>
+                        <div class="nutrition-item">
+                            <span class="nutrition-label">Carbohydrates</span>
+                            <span class="nutrition-value">{{ nutriments.get('carbohydrates_100g', 'N/A') }} g</span>
+                        </div>
+                        <div class="nutrition-item">
+                            <span class="nutrition-label">Sugars</span>
+                            <span class="nutrition-value">{{ nutriments.get('sugars_100g', 'N/A') }} g</span>
+                        </div>
+                        <div class="nutrition-item">
+                            <span class="nutrition-label">Fiber</span>
+                            <span class="nutrition-value">{{ nutriments.get('fiber_100g', 'N/A') }} g</span>
+                        </div>
+                        <div class="nutrition-item">
+                            <span class="nutrition-label">Proteins</span>
+                            <span class="nutrition-value">{{ nutriments.get('proteins_100g', 'N/A') }} g</span>
+                        </div>
+                        <div class="nutrition-item">
+                            <span class="nutrition-label">Salt</span>
+                            <span class="nutrition-value">{{ nutriments.get('salt_100g', 'N/A') }} g</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h3><i class="fas fa-check-circle"></i> Claims</h3>
+                    <p>{{ claims }}</p>
+                </div>
+
+                <div class="detail-section">
+                    <h3><i class="fas fa-list"></i> Ingredients</h3>
+                    <p>{{ ingredients_text }}</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <footer>
+            <p>Data provided by <a href="https://world.openfoodfacts.org/" target="_blank">Open Food Facts</a></p>
+        </footer>
+    </div>
+</body>
+</html>
