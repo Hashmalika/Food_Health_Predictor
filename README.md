@@ -36,7 +36,8 @@ python app.py
 
 The app will run on http://127.0.0.1:5000
 
-### 2. Model Info
+
+### 2.Model Info
 The ML model was trained on labeled data from OpenFoodFacts, targeting classification tasks such as:
 
 Predicting food categories
@@ -47,7 +48,8 @@ Assessing nutrition scores
 
 The trained model is stored as: openfoodfactr.pkl
 
-### 3.Requirements
+
+### 3. Requiremnets
 Key packages used (see full list in requirements.txt):
 
 Flask
